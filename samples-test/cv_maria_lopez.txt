@@ -1,0 +1,21 @@
+Maria Lopez
+Financial Analyst
+
+maria.lopez@finexample.com | (415) 555-0192 | San Francisco, CA
+Nationality: Mexican
+
+Objective
+Detail-oriented analyst with 5 years of experience in corporate finance.
+
+Employment
+Financial Analyst, Golden Gate Capital   2021 - Present
+Accounting Assistant, Bay Books          2019 - 2021
+
+Education
+BA Economics, UC Berkeley, 2019
+
+Skills
+Financial modelling, Excel, SQL, Tableau
+
+Languages
+Spanish, English

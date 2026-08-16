@@ -1,0 +1,23 @@
+James Omondi
+Software Engineer
+
+Email: james.omondi@mail.example.org
+Mobile: +254 712 345 678
+Nationality: Kenyan
+Address: Nairobi, Kenya
+
+Profile
+Full-stack developer specialising in Python and React.
+
+Work Experience
+Software Engineer, TechNova Ltd    2020 - Present
+Junior Developer, WebWorks         2017 - 2020
+
+Education
+BSc Computer Science, University of Nairobi, 2017
+
+Skills
+Python, JavaScript, React, PostgreSQL, Docker
+
+Languages
+English, Swahili

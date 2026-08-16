@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CV Extractor — created by FD</title>
+  <meta name="description" content="Drop in multiple CVs, choose the fields you need, and export a clean spreadsheet of every candidate." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%231B2A41'/><rect x='18' y='40' width='64' height='22' fill='%23FFD84D'/><text x='50' y='58' font-size='20' font-family='monospace' font-weight='bold' text-anchor='middle' fill='%231B2A41'>CV</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header class="masthead">
+    <div class="wordmark">
+      <span class="wordmark-cv">CV</span>
+      <span class="wordmark-rest">Extractor</span>
+    </div>
+    <p class="byline">created by FD</p>
+  </header>
+
+  <main>
+
+    <!-- Intro -->
+    <section class="intro">
+      <h1>Ten CVs in.<br /><mark>One spreadsheet</mark> out.</h1>
+      <p class="intro-sub">
+        Drop in a stack of CVs, tell it which details you care about — name, phone, email,
+        nationality, years of experience, anything — and get every candidate lined up in a
+        clean table you can export to CSV or Excel. Files never leave your browser.
+      </p>
+    </section>
+
+    <!-- Station 1: Upload -->
+    <section class="station" id="station-upload">
+      <div class="station-head">
+        <span class="station-num">1</span>
+        <h2>Add the CVs</h2>
+      </div>
+      <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Drop CV files here or click to browse">
+        <svg class="dropzone-icon" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+          <rect x="10" y="4" width="28" height="40" rx="3" stroke="currentColor" stroke-width="2.5"/>
+          <line x1="17" y1="15" x2="31" y2="15" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="17" y1="22" x2="31" y2="22" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="17" y1="29" x2="25" y2="29" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <p class="dropzone-title">Drag &amp; drop CVs here</p>
+        <p class="dropzone-hint">or click to browse — PDF, Word (.docx) and plain text, as many as you like</p>
+        <input type="file" id="file-input" multiple accept=".pdf,.docx,.doc,.txt,.rtf,.md" hidden />
+      </div>
+      <ul class="file-list" id="file-list" aria-live="polite"></ul>
+    </section>
+
+    <!-- Station 2: Fields -->
+    <section class="station" id="station-fields">
+      <div class="station-head">
+        <span class="station-num">2</span>
+        <h2>Choose your columns</h2>
+      </div>
+      <p class="station-note">Tap the details you want, or type your own request the way you'd say it out loud.</p>
+
+      <div class="chip-row" id="chip-row">
+        <button class="chip selected" data-field="First name">First name</button>
+        <button class="chip selected" data-field="Last name">Last name</button>
+        <button class="chip selected" data-field="Phone number">Phone number</button>
+        <button class="chip selected" data-field="Email">Email</button>
+        <button class="chip selected" data-field="Nationality">Nationality</button>
+        <button class="chip selected" data-field="Years of experience">Years of experience</button>
+        <button class="chip" data-field="Location">Location</button>
+        <button class="chip" data-field="Current job title">Current job title</button>
+        <button class="chip" data-field="Education">Education</button>
+        <button class="chip" data-field="Skills">Skills</button>
+        <button class="chip" data-field="Languages">Languages</button>
+        <button class="chip" data-field="LinkedIn">LinkedIn</button>
+      </div>
+
+      <div class="freeform">
+        <label for="freeform-input">Or describe it in your own words</label>
+        <div class="freeform-row">
+          <input type="text" id="freeform-input"
+                 placeholder='e.g. "I want name and last name, phone number, email, nationality, years of experience"' />
+          <button class="btn-secondary" id="freeform-apply">Set columns</button>
+        </div>
+      </div>
+
+      <details class="ai-panel" id="ai-panel">
+        <summary>
+          <span class="ai-panel-title">AI-powered extraction <span class="tag">optional</span></span>
+          <span class="ai-panel-sub">Uses Claude to read each CV — much better for unusual columns like “reason for leaving” or “salary expectation”. Needs your own Anthropic API key.</span>
+        </summary>
+        <div class="ai-panel-body">
+          <label class="switch-row">
+            <input type="checkbox" id="ai-toggle" />
+            <span>Use AI extraction (Claude)</span>
+          </label>
+          <div class="key-row" id="key-row" hidden>
+            <input type="password" id="api-key-input" placeholder="Paste your Anthropic API key (sk-ant-…)" autocomplete="off" />
+            <p class="key-hint">Stored only in this browser (localStorage). Get a key at <a href="https://platform.claude.com" target="_blank" rel="noopener">platform.claude.com</a>. Without AI mode, the built-in parser handles the standard fields above.</p>
+          </div>
+        </div>
+      </details>
+
+      <button class="btn-primary" id="extract-btn" disabled>
+        Extract information
+      </button>
+      <p class="status-line" id="status-line" aria-live="polite"></p>
+    </section>
+
+    <!-- Station 3: Results -->
+    <section class="station" id="station-results" hidden>
+      <div class="station-head">
+        <span class="station-num">3</span>
+        <h2>Your candidates</h2>
+      </div>
+      <div class="results-toolbar">
+        <p class="results-count" id="results-count"></p>
+        <div class="export-buttons">
+          <button class="btn-secondary" id="export-csv">Export .csv</button>
+          <button class="btn-primary" id="export-xlsx">Export .xlsx</button>
+        </div>
+      </div>
+      <div class="table-scroll">
+        <table id="results-table">
+          <thead></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p class="table-hint">Click any cell to edit it before exporting. Empty cells mean the detail wasn’t found — the AI mode is usually better at tricky ones.</p>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>CV Extractor, created by FD · CVs are processed in your browser and never uploaded to a server<span id="ai-footnote" hidden> (except when AI mode sends text to the Claude API)</span>.</p>
+  </footer>
+
+  <script src="lib/pdf.min.js"></script>
+  <script src="lib/mammoth.browser.min.js"></script>
+  <script src="lib/xlsx.full.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

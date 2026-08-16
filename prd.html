@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PRD — CV Extractor, created by FD</title>
+  <meta name="description" content="Product Requirements Document for CV Extractor: problem, goals, requirements, architecture, and success metrics." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%231B2A41'/><rect x='18' y='40' width='64' height='22' fill='%23FFD84D'/><text x='50' y='58' font-size='20' font-family='monospace' font-weight='bold' text-anchor='middle' fill='%231B2A41'>CV</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* PRD document layout */
+    .prd a, .site-footer a {
+      color: var(--ink);
+      font-weight: 600;
+      text-decoration-thickness: 2px;
+      text-decoration-color: var(--highlight);
+      text-underline-offset: 2px;
+    }
+    .prd a:hover, .site-footer a:hover { background: var(--highlight-soft); }
+
+    .prd {
+      max-width: 46rem;
+      margin: 0 auto;
+      padding: clamp(2rem, 6vw, 3.5rem) clamp(1.2rem, 5vw, 2.5rem) 5rem;
+    }
+
+    .prd-meta {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+      gap: 0.8rem 1.5rem;
+      background: var(--card);
+      border: 1.5px solid var(--line);
+      border-radius: var(--radius);
+      padding: 1.2rem 1.4rem;
+      margin: 1.8rem 0 2.6rem;
+      font-size: 0.88rem;
+    }
+    .prd-meta dt {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--slate);
+      margin-bottom: 0.15rem;
+    }
+    .prd-meta dd { font-weight: 600; }
+
+    .prd h1 {
+      font-weight: 900;
+      font-stretch: 116%;
+      font-size: clamp(1.9rem, 5vw, 2.9rem);
+      line-height: 1.08;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+    }
+    .prd .doc-kicker {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--slate);
+      margin-bottom: 0.7rem;
+    }
+
+    .prd h2 {
+      font-weight: 800;
+      font-stretch: 112%;
+      font-size: 1.25rem;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      margin: 2.8rem 0 0.9rem;
+      padding-top: 1.6rem;
+      border-top: 2px solid var(--ink);
+      display: flex;
+      align-items: baseline;
+      gap: 0.6rem;
+    }
+    .prd h2 .sec-num {
+      font-family: var(--font-mono);
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--slate);
+    }
+    .prd h3 {
+      font-weight: 700;
+      font-size: 1rem;
+      margin: 1.5rem 0 0.4rem;
+    }
+
+    .prd p, .prd li { color: var(--ink-soft); font-size: 0.97rem; }
+    .prd p + p { margin-top: 0.8rem; }
+    .prd ul, .prd ol { padding-left: 1.3rem; margin: 0.5rem 0 1rem; }
+    .prd li { margin-bottom: 0.35rem; }
+    .prd li::marker { color: var(--slate); }
+    .prd strong { color: var(--ink); }
+
+    .prd mark {
+      background: linear-gradient(100deg, transparent 1%, var(--highlight) 4%, var(--highlight) 96%, transparent 99%);
+      color: inherit;
+      padding: 0 0.15em;
+    }
+
+    .prd table {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 0.88rem;
+      margin: 0.8rem 0 1.2rem;
+    }
+    .prd th {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      text-align: left;
+      background: var(--ink);
+      color: var(--paper);
+      padding: 0.55rem 0.8rem;
+    }
+    .prd td {
+      padding: 0.55rem 0.8rem;
+      border: 1px solid var(--line);
+      vertical-align: top;
+      background: var(--card);
+      color: var(--ink-soft);
+    }
+    .prd td:first-child { font-weight: 600; color: var(--ink); white-space: nowrap; }
+    .prd .table-wrap { overflow-x: auto; }
+
+    .req-id {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 600;
+      background: var(--ink);
+      color: var(--highlight);
+      border-radius: 3px;
+      padding: 0.12em 0.45em;
+      margin-right: 0.5em;
+      white-space: nowrap;
+    }
+    .prio {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      border-radius: 3px;
+      padding: 0.12em 0.45em;
+      margin-left: 0.45em;
+      white-space: nowrap;
+    }
+    .prio.p0 { background: var(--highlight); color: var(--ink); }
+    .prio.p1 { background: var(--line); color: var(--ink-soft); }
+    .prio.p2 { background: transparent; border: 1px solid var(--line); color: var(--slate); }
+
+    .quote-card {
+      border-left: 4px solid var(--highlight);
+      background: var(--card);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 0.9rem 1.2rem;
+      margin: 1rem 0;
+      font-style: italic;
+    }
+    .quote-card cite {
+      display: block;
+      font-style: normal;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--slate);
+      margin-top: 0.4rem;
+    }
+
+    .flow {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      background: var(--ink);
+      color: var(--paper);
+      border-radius: var(--radius);
+      padding: 1.1rem 1.3rem;
+      overflow-x: auto;
+      white-space: pre;
+      line-height: 1.7;
+      margin: 0.8rem 0 1.2rem;
+    }
+    .flow b { color: var(--highlight); font-weight: 600; }
+
+    .back-link {
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      color: var(--ink);
+    }
+
+    @media print {
+      .masthead, .site-footer, .back-link { display: none; }
+      .prd { padding: 0; max-width: none; }
+      .prd h2 { break-after: avoid; }
+      .prd table, .quote-card, .flow { break-inside: avoid; }
+      body { background: #fff; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="masthead">
+    <div class="wordmark">
+      <span class="wordmark-cv">CV</span>
+      <span class="wordmark-rest">Extractor</span>
+    </div>
+    <p class="byline">created by FD</p>
+  </header>
+
+  <main class="prd">
+
+    <p class="doc-kicker">Product Requirements Document</p>
+    <h1>CV Extractor —<br />from <mark>pile</mark> to <mark>spreadsheet</mark></h1>
+
+    <dl class="prd-meta">
+      <div><dt>Author</dt><dd>FD</dd></div>
+      <div><dt>Status</dt><dd>Shipped — v1.0 live</dd></div>
+      <div><dt>Date</dt><dd>August 2026</dd></div>
+      <div><dt>Live product</dt><dd><a href="index.html">cv-extractor-created-by-fd.vercel.app</a></dd></div>
+    </dl>
+
+    <h2><span class="sec-num">01</span> Problem</h2>
+    <p>
+      Anyone screening candidates — recruiters, hiring managers, small-business owners —
+      receives CVs as a pile of mismatched files: PDFs, Word documents, plain text, every one
+      formatted differently. Comparing candidates means opening each file, hunting for the same
+      five or six details, and retyping them into a spreadsheet by hand.
+    </p>
+    <p>
+      For a batch of 10 CVs that's roughly <strong>30–45 minutes of pure copy-paste</strong>,
+      it's error-prone (a mistyped phone number means a lost candidate), and it has to be redone
+      for every new vacancy. Existing Applicant Tracking Systems solve this but are heavyweight,
+      subscription-priced, and require uploading candidates' personal data to a third party —
+      overkill for someone who just needs a comparison table.
+    </p>
+    <div class="quote-card">
+      “I put 10 CVs in and I tell it: I want name and last name, phone number, email,
+      nationality, years of experience — and it organizes all candidates in a file with the
+      columns I've asked for.”
+      <cite>— the founding user request, verbatim</cite>
+    </div>
+
+    <h2><span class="sec-num">02</span> Goals &amp; non-goals</h2>
+    <h3>Goals</h3>
+    <ul>
+      <li><strong>One minute, not one hour:</strong> from a folder of CVs to an exportable candidate table in under a minute.</li>
+      <li><strong>User-defined columns:</strong> the user chooses the fields — in plain language, in their own words and order.</li>
+      <li><strong>Private by default:</strong> CVs contain personal data; processing must happen entirely in the user's browser with no server upload.</li>
+      <li><strong>Zero setup:</strong> a URL, not an install. No account, no subscription, no configuration.</li>
+      <li><strong>Standard outputs:</strong> export to .csv and .xlsx that open cleanly in Excel and Google Sheets.</li>
+    </ul>
+    <h3>Non-goals (v1)</h3>
+    <ul>
+      <li>Candidate ranking, scoring, or matching against a job description.</li>
+      <li>OCR of scanned/image-only PDFs.</li>
+      <li>Storage: no database, no saved sessions, no candidate profiles.</li>
+      <li>Bulk sourcing integrations (LinkedIn, job boards, email inboxes).</li>
+    </ul>
+
+    <h2><span class="sec-num">03</span> Users &amp; user stories</h2>
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th>Persona</th><th>Story</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>In-house recruiter</td>
+          <td>“I have 30 applications for one role. I want a table of name, contact, nationality and experience so I can shortlist in one sitting.”</td>
+        </tr>
+        <tr>
+          <td>Small-business owner</td>
+          <td>“I don't have an ATS. I want to compare the five candidates who emailed me without retyping anything.”</td>
+        </tr>
+        <tr>
+          <td>Agency sourcer</td>
+          <td>“Clients ask for candidate summaries in Excel with <em>their</em> columns. I want to define custom columns per client — even unusual ones like notice period.”</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h2><span class="sec-num">04</span> User flow</h2>
+    <div class="flow"><b>①  ADD CVs</b>        drag &amp; drop / browse → PDF · DOCX · TXT
+      each file parsed to text in-browser, status shown per file
+
+<b>②  CHOOSE COLUMNS</b>  tap preset chips  ·  or type a sentence:
+      "name, phone number, email, nationality, years of experience"
+      → parsed into ordered columns
+
+<b>③  EXTRACT</b>        built-in parser (default)  ·  AI mode (optional)
+      one row per CV, per-file progress line
+
+<b>④  REVIEW + EXPORT</b> click any cell to edit → Export .csv / .xlsx</div>
+
+    <h2><span class="sec-num">05</span> Functional requirements</h2>
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th>ID</th><th>Requirement</th><th>Priority</th></tr></thead>
+      <tbody>
+        <tr><td><span class="req-id">FR-1</span></td><td>Accept multiple files at once via drag-and-drop and file browser; support PDF, DOCX, TXT/MD/RTF.</td><td><span class="prio p0">P0</span></td></tr>
+        <tr><td><span class="req-id">FR-2</span></td><td>Parse each file to raw text client-side; show per-file status (reading / ready / couldn't read) and allow removal.</td><td><span class="prio p0">P0</span></td></tr>
+        <tr><td><span class="req-id">FR-3</span></td><td>Preset field chips for the common columns (name, phone, email, nationality, years of experience, etc.).</td><td><span class="prio p0">P0</span></td></tr>
+        <tr><td><span class="req-id">FR-4</span></td><td>Free-text field request: parse a natural sentence into columns, preserving the user's wording and order; unrecognized fields become custom columns.</td><td><span class="prio p0">P0</span></td></tr>
+        <tr><td><span class="req-id">FR-5</span></td><td>Built-in extraction engine: heuristics for name (document-top and email-derived), email, phone, nationality (200+ demonyms), years of experience (stated, or computed from employment date ranges), education, skills, languages, LinkedIn, location, job title.</td><td><span class="prio p0">P0</span></td></tr>
+        <tr><td><span class="req-id">FR-6</span></td><td>Results table: one row per CV with a source-file column for traceability; empty cell when a detail isn't found.</td><td><span class="prio p0">P0</span></td></tr>
+        <tr><td><span class="req-id">FR-7</span></td><td>Export the table (including manual edits) to .csv and .xlsx with sized columns.</td><td><span class="prio p0">P0</span></td></tr>
+        <tr><td><span class="req-id">FR-8</span></td><td>Inline cell editing before export.</td><td><span class="prio p1">P1</span></td></tr>
+        <tr><td><span class="req-id">FR-9</span></td><td>Optional AI extraction mode: user supplies their own API key for the AI provider (kept in localStorage); the model returns exactly the requested columns via a JSON schema, enabling arbitrary custom fields.</td><td><span class="prio p1">P1</span></td></tr>
+        <tr><td><span class="req-id">FR-10</span></td><td>Extraction is blocked until every added file has finished reading, so no file is silently skipped.</td><td><span class="prio p1">P1</span></td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h2><span class="sec-num">06</span> Non-functional requirements</h2>
+    <ul>
+      <li><strong>Privacy:</strong> no CV content leaves the browser in default mode. AI mode sends CV text only to the AI provider's API, only with the user's own key, and this is disclosed in the UI.</li>
+      <li><strong>Performance:</strong> a batch of 10 typical CVs parses and extracts in under 10 seconds on a mid-range laptop.</li>
+      <li><strong>Offline-capable:</strong> all parsing libraries are vendored — no CDN dependency for core function.</li>
+      <li><strong>Accessibility:</strong> keyboard-operable dropzone, live status regions, visible focus states, reduced-motion support.</li>
+      <li><strong>Responsive:</strong> usable from 375&nbsp;px mobile up to desktop; wide tables scroll within their own container.</li>
+      <li><strong>Zero infrastructure:</strong> fully static site; deployable to any static host, no backend to operate or secure.</li>
+    </ul>
+
+    <h2><span class="sec-num">07</span> Technical design</h2>
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th>Layer</th><th>Choice</th><th>Why</th></tr></thead>
+      <tbody>
+        <tr><td>App</td><td>Vanilla HTML/CSS/JS, no framework, no build step</td><td>The interaction model is simple; zero dependencies means zero maintenance and instant load</td></tr>
+        <tr><td>PDF parsing</td><td>pdf.js (vendored)</td><td>Battle-tested in-browser PDF text extraction, with line reconstruction from glyph positions</td></tr>
+        <tr><td>DOCX parsing</td><td>mammoth.js (vendored)</td><td>Reliable raw-text extraction from Word files</td></tr>
+        <tr><td>Extraction</td><td>Rule/heuristic engine keyed on normalized field names</td><td>Instant, free, private; handles the standard recruiter fields well</td></tr>
+        <tr><td>AI mode</td><td>LLM API with structured outputs (JSON schema built from the user's columns)</td><td>Guarantees the response matches the requested columns exactly; handles fields no heuristic can</td></tr>
+        <tr><td>Export</td><td>SheetJS for .xlsx, hand-rolled CSV with proper quoting + BOM</td><td>Files open correctly in Excel, Google Sheets, and Numbers</td></tr>
+        <tr><td>Hosting</td><td>Vercel static hosting, auto-deploy from GitHub main</td><td>Push-to-deploy, global CDN, zero ops</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <h3>Key design decisions</h3>
+    <ul>
+      <li><strong>Client-side first, AI as an opt-in tier.</strong> Most extraction needs are covered by deterministic rules at zero cost and maximum privacy; the AI tier exists for the long tail of custom columns, and the user brings their own key so the product has no per-use cost to operate.</li>
+      <li><strong>Years of experience is computed, not just matched.</strong> When a CV doesn't state “X years of experience”, the engine derives it from the earliest-to-latest employment date ranges and marks it as an estimate (<em>~9</em>).</li>
+      <li><strong>Columns mirror the user's words.</strong> Column headers are exactly what the user typed, in the order they typed them — the export looks like the table they asked for, not the schema the tool prefers.</li>
+    </ul>
+
+    <h2><span class="sec-num">08</span> Success metrics</h2>
+    <ul>
+      <li><strong>Time-to-table:</strong> &lt; 60 seconds from first file drop to export, for a 10-CV batch (v1 measured: ~15 s with the built-in engine).</li>
+      <li><strong>Extraction accuracy:</strong> ≥ 90% of standard fields (name, email, phone, nationality) correct on text-based CVs without manual editing.</li>
+      <li><strong>Completion rate:</strong> share of sessions that reach an export after adding files.</li>
+      <li><strong>Zero privacy incidents:</strong> no CV content transmitted in default mode — verifiable from the network tab.</li>
+    </ul>
+
+    <h2><span class="sec-num">09</span> Risks &amp; mitigations</h2>
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th>Risk</th><th>Mitigation</th></tr></thead>
+      <tbody>
+        <tr><td>Scanned PDFs have no text layer</td><td>Clear per-file “couldn't read” status with guidance; OCR is a candidate for v2</td></tr>
+        <tr><td>Unusual CV layouts defeat heuristics</td><td>Empty cells are honest (never guessed); inline editing + AI mode as the escalation path</td></tr>
+        <tr><td>Users click Extract before files finish parsing</td><td>Extract button stays disabled until every file is read (FR-10, found in testing)</td></tr>
+        <tr><td>API key handling in AI mode</td><td>Key stays in localStorage, sent only to the AI provider over HTTPS; never to the site's host</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h2><span class="sec-num">10</span> Roadmap</h2>
+    <ul>
+      <li><strong>v1.1</strong> — duplicate-candidate detection across files; column presets saved between sessions.</li>
+      <li><strong>v1.2</strong> — OCR fallback for scanned PDFs (tesseract.js).</li>
+      <li><strong>v2</strong> — job-description matching: paste a JD and add a relevance column per candidate (AI mode).</li>
+    </ul>
+
+    <p style="margin-top:3rem"><a class="back-link" href="index.html">← Back to the product</a></p>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>CV Extractor, created by FD · <a href="index.html">Product</a> · <a href="https://github.com/FarahAldossary07/CV-Extractor-created-by-FD">Source on GitHub</a></p>
+  </footer>
+
+</body>
+</html>

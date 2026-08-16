@@ -4,6 +4,8 @@ Turn a stack of CVs into one clean spreadsheet. Drop in multiple CVs (PDF, Word,
 
 Everything runs in your browser. CVs are never uploaded to a server.
 
+**▶ Live site: <https://cv-extractor-created-by-fd.vercel.app>**
+
 ## How to use it — a walkthrough
 
 ### Step 1 — Add the CVs

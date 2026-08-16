@@ -204,7 +204,8 @@ apiKeyInput.addEventListener("input", () => {
 /* ------------------------------------------------------------ extraction */
 
 function updateExtractBtn() {
-  const ready = files.some((f) => f.status === "ready");
+  const ready = files.some((f) => f.status === "ready") &&
+    files.every((f) => f.status !== "reading…");
   const hasFields = selectedFields().length > 0;
   const aiOk = !aiToggle.checked || apiKeyInput.value.trim().length > 10;
   extractBtn.disabled = !(ready && hasFields && aiOk);

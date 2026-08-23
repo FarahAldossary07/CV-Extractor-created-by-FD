@@ -1,10 +1,34 @@
 # CV Extractor, created by FD
 
+![CV Extractor — ten CVs in, one spreadsheet out](images/01-cover.png)
+
 Turn a stack of CVs into one clean spreadsheet. Drop in multiple CVs (PDF, Word, or plain text), tell the site which details you want — *"I want name and last name, phone number, email, nationality, years of experience"* — and it lines every candidate up in a table you can export as **.csv** or **.xlsx**.
 
 Everything runs in your browser. CVs are never uploaded to a server.
 
 **▶ Live site: <https://cv-extractor-created-by-fd.vercel.app>**
+
+## Screenshots
+
+**The four-step flow**
+
+![How it works: add CVs, choose columns, extract, export](images/05-flow.png)
+
+**1 · Add the CVs** — any mix of PDF, Word and text files, read in the browser
+
+![Upload screen with three CVs loaded](images/02-upload.png)
+
+**2 · Choose your columns** — tap the presets, or type the request in plain English
+
+![Column picker with a natural-language request applied](images/03-columns.png)
+
+**3 · Your candidates** — one row per CV, traceable to its source file, ready to export
+
+![Results table with three candidates extracted](images/04-results.png)
+
+**The product requirements document** — [read it here](https://cv-extractor-created-by-fd.vercel.app/prd.html)
+
+![Product requirements document](images/06-prd.png)
 
 ## How to use it — a walkthrough
 
